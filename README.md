@@ -3,7 +3,7 @@
 This repository contains the code and data files for the CDVS Intro to Polars
 Workshop currently scheduled as an ***online*** workshop on January 14, 2026. Registration link coming shortly.
 
-## Files of interestza
+## Files of interest
 
 | File                     | Description                             |
 |--------------------------|-----------------------------------------|
