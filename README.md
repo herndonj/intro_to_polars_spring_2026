@@ -1,7 +1,7 @@
 # Intro to Polars CDVS Workshop - Spring 2026
 
 This repository contains the code and data files for the CDVS Intro to Polars
-Workshop currently scheduled as an ***online*** workshop on January 14, 2026. Registration link coming shortly.
+Workshop currently scheduled as an ***online*** workshop on February 4, 2026. See 
 
 ## Files of interest
 
