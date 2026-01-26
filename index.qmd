@@ -1,0 +1,754 @@
+---
+title: "Intro to Polars"
+author: "Joel Herndon"
+institute: Duke University Libraries<br>
+    Center for Data and Visualization Sciences
+date: 2026-02-04
+date-format: "MMMM D, YYYY"
+title-slide-attributes: 
+  data-background-color: "#3D4F7DFF"
+execute:
+  echo: true
+format: 
+  revealjs:
+    center-title-slide: true
+    slide-number: true
+    preview-links: auto
+    theme: [default, custom.scss]
+embed-resources: true
+width: 1280
+scrollable: true
+---
+
+## Topics covered
+
+::: small-text
+<br>
+
+01\. What is polars?
+
+02\. Why polars?
+
+03\. How do I import data?
+
+04\. How can I explore my data?
+
+05\. How can I transform my data?
+:::
+
+# 01. <br>What is polars? {background-color="#3D4F7DFF"}
+
+![](images/logo.png){.absolute bottom="-5em" right="1em" width="150px"}
+
+## What is Polars? {.dblue-header}
+
+-   High performance data processing library
+-   Works in Rust, R, and Python (plus more languages...)
+
+# 02. <br>Why polars? {background-color="#C04F15"}
+
+## Why polars? {.orange-header .fragments}
+
+-   Speed
+
+. . .
+
+-   Expressiveness
+
+. . .
+
+-   Strictness (consistent code) <br>
+
+. . .
+
+::: small-text
+"Come for the speed, stay for the API" <br>         - Janssens and Nieuwdorp, 2025
+:::
+
+## Polars in action {.orange-header}
+
+## 1. Dashboards {.orange-header}
+
+![](images/polars_dashboard.png)
+
+## 2. Charts {.orange-header}
+
+![](images/polars_chart.png)
+
+## 3. Summary tables {.orange-header}
+
+![](images/polars_summary_table.png)
+
+# 03. <br>How do I import data? {background-color="#08748C"}
+
+## How do I import data? {.teal-header}
+
+-   Today, we will focus on loading a file of comma separated values (csv) to create a **DataFrame**
+
+. . .
+
+-   Note that polars can also read data from excel and many other formats.
+
+## Polars DataFrames {.teal-header}
+
+::::: df_primary_container
+::: df_left_column
+![](images/flights_dataframe.png)
+:::
+
+::: {.df_right_column .incremental .small-text}
+<br>
+
+-   each column can hold a different data type
+-   each column must contain the same number of elements
+-   columns are labeled with unique names
+:::
+:::::
+
+## Importing csv files {.teal-header}
+
+The `read_csv()` function creates polars DataFrame from a csv file.
+
+::: {.large-cell-output .cell-output style="margin-top: 1em;"}
+```{python}
+#| output-location: slide
+import polars as pl
+flights = pl.read_csv("data/flights.csv")
+flights
+```
+:::
+
+## CSV Save {.teal-header}
+
+The `write_csv()` function creates a csv file to preserve the data.
+
+::: {.large-cell-output .cell-output style="margin-top: 1em;"}
+```{python}
+import polars as pl
+flights.write_csv("data/saved_flights.csv")
+```
+:::
+
+. . .
+
+![](images/saved_flights.png){.absolute top="45%" left="0%" width="520px"}
+
+```{=html}
+<!--
+
+## Polars DataFrames{.teal-header}
+
+
+- are immutable
+
+. . .
+
+- support vectorized operations
+
+. . .
+
+- are very efficient
+
+-->
+```
+
+# 04. <br>How can I explore my data? {background-color="#73140B"}
+
+## Exploring DataFrames {.burg-header}
+
+## Exploring DataFrames {.burg-header}
+
+::: small-text
+<br>
+
+01\. Evaluating data size
+
+```{=html}
+<!--02\. Browsing DataFrames
+
+03\. Understanding variables and types
+
+04\. Considering descriptive statistics
+
+05\. Handling missing data -->
+```
+:::
+
+## Evaluating size {.burg-header}
+
+Polars includes the `shape` of the Dataframe in its default output.
+
+(`shape: (6,4)`)
+
+::: {.small-text .cell-output style="margin-top: 1em;"}
+```{python}
+flights
+```
+:::
+
+## Evaluating size {.burg-header}
+
+You can also check the properties of a DataFrame programmatically:
+
+::: {.small-text .cell-output style="margin-top: 1em;"}
+**`height`** for a count of rows
+
+```{python}
+flights.height
+```
+:::
+
+::: {.small-text .cell-output style="margin-top: 1em;"}
+**`width`** for a count of columns
+
+```{python}
+flights.width
+```
+:::
+
+::: {.small-text .cell-output style="margin-top: 1em;"}
+**`shape`** for height and rows
+
+```{python}
+flights.shape
+```
+:::
+
+## Exploring DataFrames {.burg-header}
+
+::: small-text
+<br>
+
+01\. Evaluating size
+
+02\. Browsing
+
+```{=html}
+<!--03\. Understanding variables and types
+
+04\. Considering descriptive statistics
+
+05\. Handling missing data -->
+```
+:::
+
+## Browsing {.burg-header}
+
+::: {.small-text .cell-output style="margin-top: 1em;"}
+**`head()`** list the first five rows of data
+
+```{python}
+flights.head()
+```
+:::
+
+## Browsing {.burg-header}
+
+::: {.small-text .cell-output style="margin-top: 1em;"}
+**`tail()`** list the final five rows of data
+
+```{python}
+flights.tail()
+```
+:::
+
+## Browsing {.burg-header}
+
+::: {.small-text style="margin-top: 1em;"}
+By default, Polars will print the first and last 5 rows of a DataFrame when printed.\
+If you want to see more rows:
+:::
+
+::: {.large-cell-output style="margin-top: 1em;"}
+```{python}
+pl.Config.set_tbl_rows(100) # increase the default rows printed to 100  
+```
+:::
+
+## Exploring {.burg-header}
+
+::: small-text
+<br>
+
+01\. Evaluating data size
+
+02\. Browsing DataFrames
+
+03\. Understanding columns
+
+```{=html}
+<!--04\. Considering descriptive statistics
+
+05\. Handling missing data -->
+```
+:::
+
+## Understanding columns {.burg-header}
+
+**`columns`** lists the column names
+
+::: {.large-cell-output style="margin-top: 1em;"}
+```{python}
+flights.columns
+```
+:::
+
+<br> **`schema`** lists columns names and data types
+
+::: {.large-cell-output style="margin-top: 1em;"}
+```{python}
+flights.schema
+```
+:::
+
+## Exploring DataFrames {.burg-header}
+
+::: small-text
+<br>
+
+01\. Evaluating data size
+
+02\. Browsing
+
+03\. Understanding columns
+
+04\. Considering descriptive statistics
+
+<!-- 05\. Handling missing data -->
+:::
+
+## Descriptive statistics {.burg-header}
+
+Often, we want to assess the associated statistics for each column.
+
+::: {.small-text .cell-output style="margin-top: 1em;"}
+**`describe()`** provides descriptive statistics for DataFrames
+
+```{python}
+flights.describe()
+```
+:::
+
+## Exploring data {.burg-header}
+
+::: small-text
+<br>
+
+01\. Evaluating data size
+
+02\. Browsing
+
+03\. Understanding columns
+
+04\. Considering descriptive statistics
+
+05\. Handling missing data
+:::
+
+## Missing data {.burg-header}
+
+-   Polars represents missing data as `null`.
+-   Polars excludes missing data from calculations
+
+::: {.large-cell-output style="margin-top: 1em;"}
+```{python}
+flights.head(1)
+```
+:::
+
+# 05. <br>How can I transform my data? {background-color="#497837"}
+
+## Five essential data wrangling verbs {.green-header}
+
+::::: {.columns style="margin-top: 2em;"}
+::: {.column width="80%"}
+| Task                  | polars "verb"  |
+|-----------------------|------------------|
+| Subset columns        | `select()`       |
+| Subset rows           | `filter()`       |
+| Sort                  | `sort()`         |
+| Create a new variable | `with_columns()` |
+| Aggregate by groups   | `group_by()`     |
+:::
+
+::: {.column width="20%"}
+<!-- Right side content or leave empty -->
+:::
+:::::
+
+::: notes
+I'm calling these "verbs" as an analogy to spoken languages. Technically they are methods (or functions) as you see in the table.
+:::
+
+## 5.1. Subset columns with select() {.green-header style="font-size: 0.8em;"}
+
+::::: {.columns style="margin-top: 2em;"}
+::: {.column width="40%"}
+-   `select()` chooses columns
+:::
+
+::: {.column width="60%"}
+<!-- Right side content or leave empty -->
+:::
+:::::
+
+## 5.1. Subset columns with select() {.green-header style="font-size: 0.8em;"}
+
+::::: {.columns style="margin-top: 4em;"}
+::: {.column .incremental width="50%"}
+<br>
+
+-   `select()` chooses columns
+-   The `flights` DataFrame has four columns.
+-   Let's select `flight` and `cost`
+:::
+
+::: {.column width="50%" style="background-color: #F7F7F7; margin-top: 2em;"}
+| column      | description               |
+|:------------|:--------------------------|
+| flight      | destination of RDU flight |
+| cost        | cost of flight            |
+| distance_km | distance in km            |
+| non_stop    | is flight non-stop        |
+:::
+:::::
+
+## 5.1. Subset columns with select() {.green-header style="font-size: 0.8em;"}
+
+::::: {.columns style="margin-top: 8em;"}
+::: {.column .large-cell-output width="80%"}
+```{python}
+flights.select(pl.col('flight','cost'))
+```
+:::
+
+::: {.column width="20%"}
+<!-- Right side content or leave empty -->
+:::
+:::::
+
+::: {style="margin-top: 1em; font-size: 0.6em;"}
+\*\*Note that the columns return in the order that I request them.
+:::
+
+## 5.1. Subset columns with select() {.green-header style="font-size: 0.8em;"}
+
+Often using the `drop()` method to remove columns is more efficient than `select()`.
+
+::: {.large-cell-output style="margin-top: 1em;"}
+```{python}
+flights.drop(pl.col('cost'))
+```
+:::
+
+## 5.1. Subset columns with select() {.green-header style="font-size: 0.8em;"}
+
+-   `select()` reduces the DataFrame to the essential columns and improves perfomance.
+
+-   Polars offers numerous options for more precise selections including:
+
+    -   **Regular Expressions**: `flights.select(pl.col('^c.*$'))` \# columns starting with "c"
+    -   **Select by data type**: `flights.select(df.select(pl.col(pl.Int64))`
+    -   **Slicing** (not recommended, but possible!): `flights[:]`
+
+## 5.2 Subset rows with filter() {.green-header style="font-size: 0.8em;"}
+
+The `filter` command is the primary method for identifying rows that you wish to include in a dataframe.
+
+::: {style="margin-top: 1em;"}
+```{python}
+flights.filter(pl.col('non_stop'))
+```
+:::
+
+## 5.2 Subset rows with filter() {.green-header style="font-size: 0.8em;"}
+
+Let's say that we wanted only the flights from RDU that were:
+
+-   a distance less than 1000 kilometers
+
+::: {.large-cell-output .cell-output style="margin-top: 1em;"}
+```{python}
+flights.filter(pl.col('distance_km') < 1000)
+```
+:::
+
+::: {style="margin-top: 1em; font-size: 0.6em;"}
+\*\*So, our Boston and New York flights are both under 1000 kilometers from Durham.
+:::
+
+## 5.2 Subset rows with filter() {.green-header style="font-size: 0.8em;"}
+
+Polars also has convenient tools for finding text:
+
+-   Is there a flight to Svalbard?
+
+::: {.large-cell-output .cell-output style="margin-top: 1em;"}
+```{python}
+flights.filter(pl.col('flight').str.contains("Svalbard"))
+```
+:::
+
+::: {style="margin-top: 1em; font-size: 0.6em;"}
+\*\*So, our Boston and New York flights are both under 1000 kilometers from Durham.
+:::
+
+
+## 5.2 Subset rows with filter() {.green-header style="font-size: 0.8em;"}
+
+Polars allows complex filter queries by combining multiple conditions using boolean expressions. For most operations, you will use the following operators to build these expressions.
+
+::: {style="margin-top: 2em; display: flex; justify-content: center;"}
+| Operator | Symbol |
+|----------|:------:|
+| AND      |   &    |
+| OR       |   \|   |
+| NOT      |   \~   |
+:::
+
+## 5.2 Subset rows with filter() {.green-header style="font-size: 0.8em;"}
+
+::: {.smaller style="margin-top: 1em;"}
+Let's say that we want to see all the flights that are:
+
+-   less than 6000 kilometers from Durham
+-   less than \$500
+:::
+
+::: {.large-cell-output .cell-output style="margin-top: 1em;"}
+```{python}
+flights.filter(
+    (pl.col('distance_km')<6000) &
+    (pl.col('cost')< 500.00)
+)
+```
+:::
+
+## 5.2 Subset rows with filter() {.green-header style="font-size: 0.8em;"}
+
+Final thoughts on `filter`-ing:
+
+::: incremental
+1.  Polars tends to require explicit conditions
+2.  Polars wants you to enclose each condition in parenthesis.
+3.  Using software that highlights parentheses can be helpful.
+:::
+
+## 5.3 sort() {.green-header style="font-size: 0.8em;"}
+
+`sort()` allows us to specify how the rows in the DataFrame should be ordered.
+
+## 5.3 sort() {.green-header style="font-size: 0.8em;"}
+
+Let's try a simple sort based on our filtered data.
+
+- We will sort by distance for non-stop flights.
+
+::: {.large-cell-output .cell-output style="margin-top: 1em;"}
+```{python}
+flights.filter(pl.col('non_stop')).sort(pl.col('distance_km'))
+```
+:::
+
+::: notes
+Note how the distances are sorted in ascending order
+:::
+
+## 5.3 sort() {.green-header style="font-size: 0.8em;"}
+
+In the above, note how `sort` defaults to ascending order.
+
+- If you want to sort in descending order:
+
+::: {.large-cell-output .cell-output style="margin-top: 1em;"}
+```{python}
+flights.filter(pl.col('non_stop')).sort(pl.col('distance_km'), descending=True)
+```
+:::
+
+## 5.3 sort() {.green-header style="font-size: 0.8em;"}
+It is entirely possible to specify more than one column for a sort.
+- Let's look at our non-stop flights sort by the cost and the distance.
+```{python}
+#| output-location: column
+(
+flights
+    .filter(pl.col('non_stop'))
+    .sort(
+        [
+pl.col('cost'),
+pl.col('distance_km')
+        ],
+descending=[True, False]          
+    )
+)
+```
+
+## 5.3 sort() {.green-header style="font-size: 0.8em;"}
+
+If you have missing data in a sort column, it will be listed first.
+
+- Show `null` values last by adding the `nulls_last=True` parameter:
+
+```{python}
+flights.sort(pl.col('cost'), descending=True, nulls_last=True)
+```
+
+## 5.4 with_columns() {.green-header style="font-size: 0.8em;"}
+
+`with_columns()` provides a convenient way to add columns to DataFrames.
+
+- First, we assign a column name using *keyword argument syntax" (*cost_per_kilometer*)
+- Then we calculate the cost per kilometer
+
+```{python}
+flights.with_columns(
+   cost_per_kilometer = pl.col('cost') / pl.col('distance_km')
+)
+```
+
+## 5.4 with_columns() {.green-header style="font-size: 0.8em;"}
+
+Polars only makes changes to dataframes permanent when you save the change.
+
+- Even though I calculated "cost_per_kilometer" on the last slide...
+- The column was not added to the DataFrame (any guesses as to why?) 
+
+```{python}
+flights
+```
+
+
+## 5.4 with_columns() {.green-header style="font-size: 0.8em;"}
+
+Polars only makes changes to dataframes permanent when you save the change.
+
+- Let's save the `cost_per_kilometer` permanently to our DataFrame.
+- Note that this example assigns the output to `flights`:
+
+```{python}
+flights = flights.with_columns(
+   cost_per_kilometer = pl.col('cost') / pl.col('distance_km')
+)
+flights
+```
+
+
+## 5.4 with_columns() {.green-header style="font-size: 0.8em;"}
+
+Polars offers a second syntax style for creating columns that is frequently used.
+
+-   *Expression based syntax* assigns the column name using the `.alias()` method.
+
+```{python}
+flights = flights.with_columns(
+   (pl.col('cost') / pl.col('distance_km')).alias('cost_per_kilometer')
+)
+flights
+```
+
+## 5.5 group_by() {.green-header style="font-size: 0.8em;"}
+
+`group_by()` groups rows defined by one or more variables.
+
+-   Note that `group_by()` requires additional code to use the groupings!
+
+```{python}
+flights.group_by(pl.col('non-stop')) # this creates groups... but no output!
+```
+
+## 5.5 group_by() {.green-header style="font-size: 0.8em;"}
+
+How many flights are non-stop (true) and "multi-stop" (false)?
+
+-   `group_by()` combined with length or `len()` will count the rows in each group!
+
+```{python}
+flights.group_by(pl.col('non_stop')).len()
+```
+
+## 5.5 group_by() {.green-header style="font-size: 0.8em;"}
+
+If you have multiple aggregations that you wish to perform on each group of data
+
+-   `agg()`(or aggregrate) allows one or more calculations per grouping
+-   you must use *expression based syntax* if you use `.agg()` after a `group_by()`
+
+```{python}
+(
+flights.group_by(pl.col('non_stop'))
+    .agg(
+        pl.col('distance_km').mean().alias('average_distance_km')
+    )
+)
+```
+
+## 5.6 over() {.green-header style="font-size: 0.8em;"}
+
+I know...
+
+I said I was only going to show you five common "verbs" in Polars...
+
+-   `group_by()` provides a convenient way to "collapse" data into groups...
+-   but, sometimes you want the group calculation in the *original* DataFrame
+-   This is where the `over()` method comes in handy.
+
+## 5.6 over() {.green-header style="font-size: 0.8em;"}
+
+Let's calculate the average distance **over** non-stop and multi-stop flights. - We will insert the calculation for each group in the DataFrame.
+
+::: small-text
+```{python}
+(
+flights.
+  with_columns(pl.col('distance_km')
+    .mean()
+    .over(pl.col('non_stop'))
+    .alias('average_distance_km'))
+  .select(pl.col('flight','non_stop','average_distance_km'))
+  .head(3)
+)
+```
+:::
+
+# 06. Polars in practice {background-color="#73065B"}
+
+## Example 1<br>Departing flights by year {.purple-header}
+
+## Example 2<br>Departure delays by year {.purple-header}
+
+## Example 3<br> Exploring delays and departures {.purple-header}
+
+# 04.<br>Polars resources {background-color="#833437FF"}
+
+## General Resources {.ghibli-maroon}
+
+- *CDVS - Duke Libraries - askdata@duke.edu*  
+As always, Duke Libraries Center for Data and Visualization Science 
+(askdata@duke.edu) can assist with questions about data management and
+ data wrangling. Consultations are available by appointment.
+
+- *Polars API*  
+The [Polars Python API](https://docs.pola.rs/api/python/stable/reference/index.html) 
+is an outstanding resource for the latest syntax. If you are questioning the
+ validity of AI suggestions (and sometimes those suggestions are erroneous!),
+the API can help resolve questions.
+
+## eBook Resources {.ghibli-maroon}
+
+Duke Libraries subscribe to the [O'Reilly for Higher Education](https://go.oreilly.com/duke-university) Database where
+ you will find Jeroen Janssens and Thijs Nieuwdorp's [Python Polars: The Definitive Guide](https://learning.oreilly.com/library/view/python-polars-the/9781098156077/). This is an excellent way to learn Polars and serves as compelling reference.
+
+## Data Resources {.ghibli-maroon}
+
+We used FAA flight data pulled using the [anyflights]() API. 
+If you would like to investigate this API further check out:  
+
+Couch S (2023). anyflights: Query 'nycflights13'- Air Travel Data for Given Years and Airports. https://github.com/simonpcouch/anyflights, https://simonpcouch.github.io/anyflights/.
+
+## Other polars APIs {.ghibli-maroon}
+
+As mentioned in the introduction, [Polars](https://pola.rs/) is written in Rust
+ and has implementations in Julia, R (check out [TidyPolars](https://tidypolars.etiennebacher.com/)
+ , and Javascript. If Polars seems compelling and you regularly use one of those
+  languages, please try one of the other implementations!
