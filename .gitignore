@@ -1,0 +1,10 @@
+# Quarto stuff
+/.quarto/
+/_site/
+**/*_cache/*
+
+# Miscellaneous stuff
+
+.DS_Store
+
+**/*.quarto_ipynb
