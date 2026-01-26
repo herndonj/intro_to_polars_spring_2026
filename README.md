@@ -7,6 +7,6 @@ Workshop currently scheduled as an ***online*** workshop on February 4, 2026.
 
 | File                     | Description                             |
 |--------------------------|-----------------------------------------|
-| Coming soon   | quarto slides with class materials |
+| index.qmd | quarto slides with class materials |
 | data/flights.csv | six flights from RDU airport for class examples   |
 | data/rdu_flights.parquet | all departing flights from RDU from 2010 - (sep) 2014   |
