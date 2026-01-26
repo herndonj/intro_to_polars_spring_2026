@@ -1,0 +1,115 @@
+
+/* This scss file is adapted from
+the scss file used in McCall Pitcher's (CDVS) Intro to R workshop.
+I've modified it to reflect a few personal preferences.
+All errors are the authors!
+*/
+/*-- scss:defaults --*/
+
+$presentation-title-slide-text-align: "left";
+$presentation-heading-color: #444;
+$body-color: #666;
+$code-bg: #EEF8FC;
+$code-block-bg: #F7F7F7;
+$fontsize: .8em;
+
+/*-- scss:rules --*/
+
+.cell-output {
+  font-size: 0.80em;
+}
+
+.large-cell-output {
+  font-size: 1.2em;
+}
+
+.small-text {
+  font-size: 0.80em;
+}
+
+/* Add space before first fragment and between fragments */
+.spaced-fragment {
+  margin-top: 2em;
+}
+
+/* Add space between text and code within fragments */
+.spaced-fragment p {
+  margin-bottom: 1em;
+}
+
+.df_small-text {
+  font-size: 0.50em;
+}
+
+
+.reveal .df_primary_container {
+  display: flex;
+}
+
+.df_left_column,
+.df_right_column{
+  flex: 1;
+}
+
+
+h1 {
+  color: white !important;
+}
+
+.callout-note {
+  border-color: #ccc !important;
+}
+
+.dblue-header h2 {
+  color: #3D4F7DFF;
+}
+
+.blue-header h2 {
+  color: #4c76a0;
+}
+
+.ghibli-maroon h2 {
+  color: #833437FF;
+}
+
+.grey-header h2 {
+  color: #657060FF;
+}
+
+.orange-header h2 {
+  color: #C04F15;
+}
+
+.teal-header h2 {
+  color: #08748C;
+}
+
+.burg-header h2 {
+  color: #73140B;
+}
+
+.green-header h2 {
+  color: #497837;
+}
+
+.purple-header h2 {
+  color: #73065B;
+}
+
+.reveal .progress {
+  display: none !important;
+}
+
+.reveal .cell-output table {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.reveal table th:first-child,
+.reveal table td:first-child {
+  white-space: nowrap;
+}
+
+.reveal .slide-menu-button .fa-bars::before {
+ background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgb(204, 204, 204)" class="bi bi-list" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/></svg>') !important;
+}
