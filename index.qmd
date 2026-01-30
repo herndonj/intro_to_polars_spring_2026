@@ -15,7 +15,7 @@ format:
     slide-number: true
     preview-links: auto
     theme: [default, custom.scss]
-embed-resources: true
+    embed-resources: true
 width: 1280
 scrollable: true
 ---
@@ -42,8 +42,10 @@ scrollable: true
 
 ## What is Polars? {.dblue-header}
 
+:::{.incremental}
 -   High performance data processing library
 -   Works in Rust, R, and Python (plus more languages...)
+:::
 
 # 02. <br>Why polars? {background-color="#C04F15"}
 
@@ -453,7 +455,7 @@ flights.drop(pl.col('cost'))
 
 ## 5.2 Subset rows with filter() {.green-header style="font-size: 0.8em;"}
 
-The `filter` command is the primary method for identifying rows that you wish to include in a dataframe.
+The `filter` command identifies rows that you wish to include in a dataframe.
 
 ::: {style="margin-top: 1em;"}
 ```{python}
@@ -529,8 +531,8 @@ flights.filter(
 Final thoughts on `filter`-ing:
 
 ::: incremental
-1.  Polars tends to require explicit conditions
-2.  Polars wants you to enclose each condition in parenthesis.
+1.  Polars requires explicit conditions
+2.  Polars requires you to enclose each condition in parentheses.
 3.  Using software that highlights parentheses can be helpful.
 :::
 
@@ -576,10 +578,10 @@ flights
     .filter(pl.col('non_stop'))
     .sort(
         [
-pl.col('cost'),
-pl.col('distance_km')
+          pl.col('cost'),
+          pl.col('distance_km')
         ],
-descending=[True, False]          
+        descending=[True, False]          
     )
 )
 ```
@@ -598,7 +600,7 @@ flights.sort(pl.col('cost'), descending=True, nulls_last=True)
 
 `with_columns()` provides a convenient way to add columns to DataFrames.
 
-- First, we assign a column name using *keyword argument syntax" (*cost_per_kilometer*)
+- First, we assign a column name using "*keyword argument syntax*" (*cost_per_kilometer*)
 - Then we calculate the cost per kilometer
 
 ```{python}
@@ -636,7 +638,7 @@ flights
 
 ## 5.4 with_columns() {.green-header style="font-size: 0.8em;"}
 
-Polars offers a second syntax style for creating columns that is frequently used.
+Polars offers a second syntax style for creating columns.
 
 -   *Expression based syntax* assigns the column name using the `.alias()` method.
 
@@ -661,7 +663,7 @@ flights.group_by(pl.col('non-stop')) # this creates groups... but no output!
 
 How many flights are non-stop (true) and "multi-stop" (false)?
 
--   `group_by()` combined with length or `len()` will count the rows in each group!
+-   `group_by()` combined with `len()` (length) will count the rows in each group!
 
 ```{python}
 flights.group_by(pl.col('non_stop')).len()
@@ -672,7 +674,7 @@ flights.group_by(pl.col('non_stop')).len()
 If you have multiple aggregations that you wish to perform on each group of data
 
 -   `agg()`(or aggregrate) allows one or more calculations per grouping
--   you must use *expression based syntax* if you use `.agg()` after a `group_by()`
+-   note: you must use *expression based syntax* if you use `.agg()` after a `group_by()`
 
 ```{python}
 (
@@ -706,18 +708,118 @@ flights.
     .over(pl.col('non_stop'))
     .alias('average_distance_km'))
   .select(pl.col('flight','non_stop','average_distance_km'))
-  .head(3)
 )
 ```
 :::
 
-# 06. Polars in practice {background-color="#73065B"}
+# 06. <br>Polars in practice {background-color="#73065B"}
 
-## Example 1<br>Departing flights by year {.purple-header}
+## Big data and Polars {.purple-header}
 
-## Example 2<br>Departure delays by year {.purple-header}
+:::{.incremental}
+- Let's explore a large dataset!
+  - Roughly 1 million rows of FAA air travel data 
+  - Raleigh Durham (RDU) airport from 2010 to 2024
+  - Special thanks to Simon Couch and colleagues for the "anyflights" package used to secure these data (see final slides for details)
+:::
 
-## Example 3<br> Exploring delays and departures {.purple-header}
+## Loading our RDU flights data {.purple-header}
+
+::::: {.columns style="margin-top: 4em;"}
+::: {.column width="50%" style="background-color: #F7F7F7; margin-top: 2em;"}
+If using VSCode or Python IDE:
+
+```
+import polars as pl
+rdu_flights = pl.read_parquet("rdu_flights.parquet") 
+```
+:::
+
+::: {.column width="50%" style="background-color: #F7F7F7; margin-top: 2em;"}
+If you are using Google Colab:
+
+
+```
+import polars as pl
+from google.colab import files
+files.upload() # choose rdu_flights.parquet
+rdu_flights = pl.read_parquet("rdu_flights.parquet") 
+```
+:::
+:::::
+**NOTE** - you will need to specify the path to the data
+
+```{python}
+#| include: false
+import polars as pl
+rdu_flights = pl.read_parquet("data/rdu_flights.parquet") 
+```
+## 1. Exploring our RDU flights data {.purple-header}
+
+::: {.incremental}
+- How many rows and columns in this Dataframe?
+- `rdu_flights.shape`
+- `rdu_flights.height` and `rdu_flights.width` will also give you the answer
+- The answer: `(954988, 45)`
+  - 954,988 rows/flights
+  - 45 columns
+:::
+
+## 1. Exploring our RDU flights data {.purple-header}
+
+::: {.incremental}
+- What are the column names? (What is covered?)
+  - `rdu_flights.columns`
+- BONUS: if I wanted to see the column types, how would I do that?
+  - `rdu_flights.schema`
+:::
+
+## 2. Departing flights by year {.purple-header}
+
+What are the number of departing flights at RDU airport by year? (Bonus: sort by year)
+
+::: {.incremental}
+- `rdu_flights.group_by('year').len()`
+-  OR 
+- `rdu_flights.group_by('year').agg(pl.len().alias('flights'))`
+:::
+
+## 2. Departing flights by year {.purple-header}
+
+```{python}
+#| echo: true
+#| output-location: fragment
+rdu_flights.group_by('year').agg(pl.len().alias('flights')).sort('year')
+```
+
+
+## 3. Departure delays by year {.purple-header}
+
+::: {.incremental}
+- Let's do this one together...   
+- Are departure delays increasing or decreasing at RDU each year?
+:::
+
+## 3. Departure delays by year {.purple-header}
+
+Are departure delays increasing or decreasing at RDU each year?
+
+
+```{python}
+#| echo: true
+#| code-line-numbers: "|1-2|3|4|5|6|7-8|9|10"
+#| output-location: slide
+(
+rdu_flights
+    .group_by('year')
+    .agg(pl.col('dep_delay')
+        .filter(pl.col('dep_delay') > 15)
+        .len()
+        .alias('delayed_flights')
+    )
+    .sort('year')
+)
+```
 
 # 04.<br>Polars resources {background-color="#833437FF"}
 
@@ -741,14 +843,14 @@ Duke Libraries subscribe to the [O'Reilly for Higher Education](https://go.oreil
 
 ## Data Resources {.ghibli-maroon}
 
-We used FAA flight data pulled using the [anyflights]() API. 
+I used FAA flight data pulled using the [anyflights](https://github.com/simonpcouch/anyflights) API. 
 If you would like to investigate this API further check out:  
 
-Couch S (2023). anyflights: Query 'nycflights13'- Air Travel Data for Given Years and Airports. https://github.com/simonpcouch/anyflights, https://simonpcouch.github.io/anyflights/.
+Couch S (2023). anyflights: Query 'nycflights13'- Air Travel Data for Given Years and Airports. [Code: https://github.com/simonpcouch/anyflights](https://github.com/simonpcouch/anyflights), [Context: https://simonpcouch.github.io/anyflights/](https://simonpcouch.github.io/anyflights/).
 
 ## Other polars APIs {.ghibli-maroon}
 
-As mentioned in the introduction, [Polars](https://pola.rs/) is written in Rust
+As mentioned in the introduction, [Polars](https://pola.rs/) is written in [Rust](https://rust-lang.org/)
  and has implementations in Julia, R (check out [TidyPolars](https://tidypolars.etiennebacher.com/)
  , and Javascript. If Polars seems compelling and you regularly use one of those
   languages, please try one of the other implementations!
