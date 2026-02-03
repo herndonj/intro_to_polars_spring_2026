@@ -85,12 +85,20 @@ scrollable: true
 
 ## How do I import data? {.teal-header}
 
--   Today, we will focus on loading a file of comma separated values (csv) to create a **DataFrame**
+::::: df_primary_container
+::: {.df_left_column .incremental .small-text}
+- polars loads many (excel, parquet, etc.) formats
+- **comma separated values** (csv) are popular
+- we will focus on csv files 
+:::
 
-. . .
+::: df_right_column
+![](images/flights_csv.png)
+:::
 
--   Note that polars can also read data from excel and many other formats.
+:::::
 
+<!--
 ## Polars DataFrames {.teal-header}
 
 ::::: df_primary_container
@@ -106,6 +114,7 @@ scrollable: true
 -   columns are labeled with unique names
 :::
 :::::
+-->
 
 ## Importing csv files {.teal-header}
 
@@ -114,6 +123,7 @@ The `read_csv()` function creates polars DataFrame from a csv file.
 ::: {.large-cell-output .cell-output style="margin-top: 1em;"}
 ```{python}
 #| output-location: slide
+#| code-line-numbers: "1|2|3"
 import polars as pl
 flights = pl.read_csv("data/flights.csv")
 flights
@@ -182,7 +192,7 @@ Polars includes the `shape` of the Dataframe in its default output.
 
 (`shape: (6,4)`)
 
-::: {.small-text .cell-output style="margin-top: 1em;"}
+::: {.large-code .cell-output style="margin-top: 1em;"}
 ```{python}
 flights
 ```
@@ -194,7 +204,8 @@ You can also check the properties of a DataFrame programmatically:
 
 ::: {.small-text .cell-output style="margin-top: 1em;"}
 **`height`** for a count of rows
-
+:::
+:::{.large-code}
 ```{python}
 flights.height
 ```
@@ -202,15 +213,23 @@ flights.height
 
 ::: {.small-text .cell-output style="margin-top: 1em;"}
 **`width`** for a count of columns
+:::
 
+:::{.large-code}
 ```{python}
 flights.width
 ```
 :::
 
+## Evaluating size {.burg-header}
+
+You can also check the properties of a DataFrame programmatically:
+
 ::: {.small-text .cell-output style="margin-top: 1em;"}
 **`shape`** for height and rows
+:::
 
+:::{.large-code}
 ```{python}
 flights.shape
 ```
@@ -238,7 +257,9 @@ flights.shape
 
 ::: {.small-text .cell-output style="margin-top: 1em;"}
 **`head()`** list the first five rows of data
+:::
 
+:::{.large-code}
 ```{python}
 flights.head()
 ```
@@ -248,7 +269,9 @@ flights.head()
 
 ::: {.small-text .cell-output style="margin-top: 1em;"}
 **`tail()`** list the final five rows of data
+:::
 
+:::{.large-code}
 ```{python}
 flights.tail()
 ```
@@ -382,16 +405,22 @@ flights.head(1)
 I'm calling these "verbs" as an analogy to spoken languages. Technically they are methods (or functions) as you see in the table.
 :::
 
-## 5.1. Subset columns with select() {.green-header style="font-size: 0.8em;"}
+
+## ... and one essential function {.green-header}
 
 ::::: {.columns style="margin-top: 2em;"}
-::: {.column width="40%"}
--   `select()` chooses columns
+
+::: {.column width="50%" style="justify-content: center; align-items: center;"}
+<br>
+`pl.col()`
 :::
 
-::: {.column width="60%"}
-<!-- Right side content or leave empty -->
+::: {.incremental .column width="50%"}
+- `pl.col()` will select one or more columns
+- `pl.com()` will work with **all** of our polars verbs
 :::
+
+
 :::::
 
 ## 5.1. Subset columns with select() {.green-header style="font-size: 0.8em;"}
@@ -417,17 +446,12 @@ I'm calling these "verbs" as an analogy to spoken languages. Technically they ar
 
 ## 5.1. Subset columns with select() {.green-header style="font-size: 0.8em;"}
 
-::::: {.columns style="margin-top: 8em;"}
-::: {.column .large-cell-output width="80%"}
+
+:::{.large-code .large-cell-output width="80%"}
 ```{python}
 flights.select(pl.col('flight','cost'))
 ```
 :::
-
-::: {.column width="20%"}
-<!-- Right side content or leave empty -->
-:::
-:::::
 
 ::: {style="margin-top: 1em; font-size: 0.6em;"}
 \*\*Note that the columns return in the order that I request them.
@@ -437,7 +461,7 @@ flights.select(pl.col('flight','cost'))
 
 Often using the `drop()` method to remove columns is more efficient than `select()`.
 
-::: {.large-cell-output style="margin-top: 1em;"}
+::: {.large-code .t-margin}
 ```{python}
 flights.drop(pl.col('cost'))
 ```
@@ -457,7 +481,7 @@ flights.drop(pl.col('cost'))
 
 The `filter` command identifies rows that you wish to include in a dataframe.
 
-::: {style="margin-top: 1em;"}
+::: {.large-code .t-margin}
 ```{python}
 flights.filter(pl.col('non_stop'))
 ```
@@ -469,7 +493,7 @@ Let's say that we wanted only the flights from RDU that were:
 
 -   a distance less than 1000 kilometers
 
-::: {.large-cell-output .cell-output style="margin-top: 1em;"}
+::: {.large-code .t-margin}
 ```{python}
 flights.filter(pl.col('distance_km') < 1000)
 ```
@@ -485,15 +509,13 @@ Polars also has convenient tools for finding text:
 
 -   Is there a flight to Svalbard?
 
-::: {.large-cell-output .cell-output style="margin-top: 1em;"}
+::: {.large-code .t-margin}
 ```{python}
 flights.filter(pl.col('flight').str.contains("Svalbard"))
 ```
 :::
 
-::: {style="margin-top: 1em; font-size: 0.6em;"}
-\*\*So, our Boston and New York flights are both under 1000 kilometers from Durham.
-:::
+
 
 
 ## 5.2 Subset rows with filter() {.green-header style="font-size: 0.8em;"}
@@ -517,14 +539,24 @@ Let's say that we want to see all the flights that are:
 -   less than \$500
 :::
 
-::: {.large-cell-output .cell-output style="margin-top: 1em;"}
+## 5.2 Subset rows with filter() {.green-header style="font-size: 0.8em;"}
+
+::: {.smaller style="margin-top: 1em;"}
+
+-   less than 6000 kilometers from Durham
+-   less than \$500
+:::
+
+::: {.large-code .large-cell-output .cell-output style="margin-top: 1em;"}
 ```{python}
+#| code-line-numbers: "1|2|3-4"
 flights.filter(
     (pl.col('distance_km')<6000) &
     (pl.col('cost')< 500.00)
 )
 ```
 :::
+
 
 ## 5.2 Subset rows with filter() {.green-header style="font-size: 0.8em;"}
 
@@ -546,7 +578,7 @@ Let's try a simple sort based on our filtered data.
 
 - We will sort by distance for non-stop flights.
 
-::: {.large-cell-output .cell-output style="margin-top: 1em;"}
+::: {.large-code .t-margin}
 ```{python}
 flights.filter(pl.col('non_stop')).sort(pl.col('distance_km'))
 ```
@@ -562,15 +594,21 @@ In the above, note how `sort` defaults to ascending order.
 
 - If you want to sort in descending order:
 
-::: {.large-cell-output .cell-output style="margin-top: 1em;"}
+::: {.large-code .t-margin}
 ```{python}
-flights.filter(pl.col('non_stop')).sort(pl.col('distance_km'), descending=True)
+(
+flights
+  .filter(pl.col('non_stop'))
+  .sort(pl.col('distance_km'), descending=True)
+)
 ```
 :::
 
 ## 5.3 sort() {.green-header style="font-size: 0.8em;"}
 It is entirely possible to specify more than one column for a sort.
 - Let's look at our non-stop flights sort by the cost and the distance.
+
+:::{.large-code}
 ```{python}
 #| output-location: column
 (
@@ -585,16 +623,29 @@ flights
     )
 )
 ```
+:::
 
 ## 5.3 sort() {.green-header style="font-size: 0.8em;"}
 
 If you have missing data in a sort column, it will be listed first.
 
-- Show `null` values last by adding the `nulls_last=True` parameter:
+:::{.large-code .t-margin}
+```{python}
+flights.sort(pl.col('cost'), descending=True)
+```
+:::
 
+
+
+## 5.3 sort() {.green-header style="font-size: 0.8em;"}
+
+Show `null` values last by adding the `nulls_last=True` parameter:
+
+:::{.large-code .t-margin}
 ```{python}
 flights.sort(pl.col('cost'), descending=True, nulls_last=True)
 ```
+:::
 
 ## 5.4 with_columns() {.green-header style="font-size: 0.8em;"}
 
@@ -603,11 +654,13 @@ flights.sort(pl.col('cost'), descending=True, nulls_last=True)
 - First, we assign a column name using "*keyword argument syntax*" (*cost_per_kilometer*)
 - Then we calculate the cost per kilometer
 
+:::{.large-code .t-margin}
 ```{python}
 flights.with_columns(
    cost_per_kilometer = pl.col('cost') / pl.col('distance_km')
 )
 ```
+:::
 
 ## 5.4 with_columns() {.green-header style="font-size: 0.8em;"}
 
@@ -616,10 +669,11 @@ Polars only makes changes to dataframes permanent when you save the change.
 - Even though I calculated "cost_per_kilometer" on the last slide...
 - The column was not added to the DataFrame (any guesses as to why?) 
 
+:::{.large-code}
 ```{python}
 flights
 ```
-
+:::
 
 ## 5.4 with_columns() {.green-header style="font-size: 0.8em;"}
 
@@ -628,13 +682,14 @@ Polars only makes changes to dataframes permanent when you save the change.
 - Let's save the `cost_per_kilometer` permanently to our DataFrame.
 - Note that this example assigns the output to `flights`:
 
+:::{.large-code}
 ```{python}
 flights = flights.with_columns(
    cost_per_kilometer = pl.col('cost') / pl.col('distance_km')
 )
-flights
+flights.head(3)
 ```
-
+:::
 
 ## 5.4 with_columns() {.green-header style="font-size: 0.8em;"}
 
@@ -642,12 +697,15 @@ Polars offers a second syntax style for creating columns.
 
 -   *Expression based syntax* assigns the column name using the `.alias()` method.
 
+:::{.large-code}
 ```{python}
 flights = flights.with_columns(
-   (pl.col('cost') / pl.col('distance_km')).alias('cost_per_kilometer')
+   (pl.col('cost') / pl.col('distance_km'))
+   .alias('cost_per_kilometer')
 )
 flights
 ```
+:::
 
 ## 5.5 group_by() {.green-header style="font-size: 0.8em;"}
 
@@ -655,27 +713,33 @@ flights
 
 -   Note that `group_by()` requires additional code to use the groupings!
 
+:::{.large-code .t-margin}
 ```{python}
-flights.group_by(pl.col('non-stop')) # this creates groups... but no output!
+flights.group_by(pl.col('non-stop'))
 ```
+:::
 
 ## 5.5 group_by() {.green-header style="font-size: 0.8em;"}
 
 How many flights are non-stop (true) and "multi-stop" (false)?
 
--   `group_by()` combined with `len()` (length) will count the rows in each group!
+-   `group_by()` combined with `.agg()` (think "agregate") then `pl.len()` (length) will count grouped observations
 
+:::{.large-code .t-margin}
 ```{python}
-flights.group_by(pl.col('non_stop')).len()
+flights.group_by(pl.col('non_stop')).agg(pl.len())
 ```
+:::
+
 
 ## 5.5 group_by() {.green-header style="font-size: 0.8em;"}
 
-If you have multiple aggregations that you wish to perform on each group of data
+You can perform multiple operations on a selection.
 
--   `agg()`(or aggregrate) allows one or more calculations per grouping
--   note: you must use *expression based syntax* if you use `.agg()` after a `group_by()`
+-  Calculate the mean distance for direct and indirect flights
+-  Rename the calculated column: `average_distance_km` (use `alias`)
 
+:::{.large-code}
 ```{python}
 (
 flights.group_by(pl.col('non_stop'))
@@ -684,6 +748,7 @@ flights.group_by(pl.col('non_stop'))
     )
 )
 ```
+:::
 
 ## 5.6 over() {.green-header style="font-size: 0.8em;"}
 
@@ -692,15 +757,17 @@ I know...
 I said I was only going to show you five common "verbs" in Polars...
 
 -   `group_by()` provides a convenient way to "collapse" data into groups...
--   but, sometimes you want the group calculation in the *original* DataFrame
+-   sometimes you want the group calculation in the *original* DataFrame...
 -   This is where the `over()` method comes in handy.
 
 ## 5.6 over() {.green-header style="font-size: 0.8em;"}
 
 Let's calculate the average distance **over** non-stop and multi-stop flights. - We will insert the calculation for each group in the DataFrame.
 
-::: small-text
+::: {.large-code}
 ```{python}
+#| output-location: slide
+#| code-line-numbers: "1-2|3|4|5|6|7-8"
 (
 flights.
   with_columns(pl.col('distance_km')
@@ -761,10 +828,9 @@ rdu_flights = pl.read_parquet("data/rdu_flights.parquet")
 - `rdu_flights.shape`
 - `rdu_flights.height` and `rdu_flights.width` will also give you the answer
 - The answer: `(954988, 45)`
-  - 954,988 rows/flights
-  - 45 columns
 :::
 
+<!--
 ## 1. Exploring our RDU flights data {.purple-header}
 
 ::: {.incremental}
@@ -773,30 +839,36 @@ rdu_flights = pl.read_parquet("data/rdu_flights.parquet")
 - BONUS: if I wanted to see the column types, how would I do that?
   - `rdu_flights.schema`
 :::
+-->
 
 ## 2. Departing flights by year {.purple-header}
 
-What are the number of departing flights at RDU airport by year? (Bonus: sort by year)
+How many flights depart RDU airport by year? (Bonus: sort by year)
 
 ::: {.incremental}
-- `rdu_flights.group_by('year').len()`
--  OR 
 - `rdu_flights.group_by('year').agg(pl.len().alias('flights'))`
 :::
 
 ## 2. Departing flights by year {.purple-header}
 
+:::{.large-code}
 ```{python}
 #| echo: true
-#| output-location: fragment
-rdu_flights.group_by('year').agg(pl.len().alias('flights')).sort('year')
+#| output-location: slide
+
+(
+rdu_flights
+  .group_by('year')
+  .agg(pl.len().alias('flights'))
+  .sort('year')
+)
 ```
+:::
 
 
 ## 3. Departure delays by year {.purple-header}
 
-::: {.incremental}
-- Let's do this one together...   
+::: {.incremental} 
 - Are departure delays increasing or decreasing at RDU each year?
 :::
 
@@ -804,7 +876,7 @@ rdu_flights.group_by('year').agg(pl.len().alias('flights')).sort('year')
 
 Are departure delays increasing or decreasing at RDU each year?
 
-
+:::{.large-code}
 ```{python}
 #| echo: true
 #| code-line-numbers: "|1-2|3|4|5|6|7-8|9|10"
@@ -820,6 +892,7 @@ rdu_flights
     .sort('year')
 )
 ```
+::: 
 
 # 04.<br>Polars resources {background-color="#833437FF"}
 
@@ -854,3 +927,8 @@ As mentioned in the introduction, [Polars](https://pola.rs/) is written in [Rust
  and has implementations in Julia, R (check out [TidyPolars](https://tidypolars.etiennebacher.com/)
  , and Javascript. If Polars seems compelling and you regularly use one of those
   languages, please try one of the other implementations!
+
+## Thank you! {.ghibli-maroon}
+
+- *CDVS - Duke Libraries - askdata@duke.edu* 
+- *Joel Herndon - joel.herndon@duke.edu* 
