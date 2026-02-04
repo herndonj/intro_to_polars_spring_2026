@@ -927,7 +927,9 @@ As mentioned in the introduction, [Polars](https://pola.rs/) is written in [Rust
 
 A special thanks to McCall Pitcher. McCall's css template provides the nice styling for the different topics we covered in this workshop.
 
-## Thank you! {.ghibli-maroon}
+## Contact information {.ghibli-maroon}
 
-- *CDVS - Duke Libraries - askdata@duke.edu* 
-- *Joel Herndon - joel.herndon@duke.edu* 
+- **Slides**: https://polars26.netlify.app
+- **Code**: https://github.com/herndonj/intro_to_polars_spring_2026
+- **CDVS - Duke Libraries** - askdata@duke.edu 
+- **Joel Herndon** - joel.herndon@duke.edu 
