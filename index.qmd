@@ -845,15 +845,10 @@ rdu_flights = pl.read_parquet("data/rdu_flights.parquet")
 
 How many flights depart RDU airport by year? (Bonus: sort by year)
 
-::: {.incremental}
-- `rdu_flights.group_by('year').agg(pl.len().alias('flights'))`
-:::
-
-## 2. Departing flights by year {.purple-header}
-
 :::{.large-code}
 ```{python}
 #| echo: true
+#| code-line-numbers: "1-2|3|4|5|6-7"
 #| output-location: slide
 
 (
@@ -921,12 +916,16 @@ If you would like to investigate this API further check out:
 
 Couch S (2023). anyflights: Query 'nycflights13'- Air Travel Data for Given Years and Airports. [Code: https://github.com/simonpcouch/anyflights](https://github.com/simonpcouch/anyflights), [Context: https://simonpcouch.github.io/anyflights/](https://simonpcouch.github.io/anyflights/).
 
-## Other polars APIs {.ghibli-maroon}
+## Other polars implmentations {.ghibli-maroon}
 
 As mentioned in the introduction, [Polars](https://pola.rs/) is written in [Rust](https://rust-lang.org/)
  and has implementations in Julia, R (check out [TidyPolars](https://tidypolars.etiennebacher.com/)
  , and Javascript. If Polars seems compelling and you regularly use one of those
   languages, please try one of the other implementations!
+
+## A special thanks
+
+A special thanks to McCall Pitcher. McCall's css template provides the nice styling for the different topics we covered in this workshop.
 
 ## Thank you! {.ghibli-maroon}
 
