@@ -417,7 +417,7 @@ I'm calling these "verbs" as an analogy to spoken languages. Technically they ar
 
 ::: {.incremental .column width="50%"}
 - `pl.col()` will select one or more columns
-- `pl.com()` will work with **all** of our polars verbs
+- `pl.col()` will work with **all** of our polars verbs
 :::
 
 
