@@ -929,7 +929,7 @@ A special thanks to McCall Pitcher. McCall's css template provides the nice styl
 
 ## Contact information {.ghibli-maroon}
 
-- **Slides**: https://polars26.netlify.app
-- **Code**: https://github.com/herndonj/intro_to_polars_spring_2026
+- **Slides**: [https://polars26.netlify.app](https://polars26.netlify.app)
+- **Code**: [https://github.com/herndonj/](https://github.com/herndonj/)intro_to_polars_spring_2026
 - **CDVS - Duke Libraries** - askdata@duke.edu 
 - **Joel Herndon** - joel.herndon@duke.edu 
