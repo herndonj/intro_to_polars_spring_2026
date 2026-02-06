@@ -894,7 +894,7 @@ rdu_flights
 ## General Resources {.ghibli-maroon}
 
 - *CDVS - Duke Libraries - askdata@duke.edu*  
-As always, Duke Libraries Center for Data and Visualization Science 
+As always, Duke Libraries Center for Data and Visualization Sciences 
 (askdata@duke.edu) can assist with questions about data management and
  data wrangling. Consultations are available by appointment.
 
